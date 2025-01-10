@@ -3,6 +3,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, FunctionTransformer
 from sklearn.compose import ColumnTransformer
+from sklearn.base import BaseEstimator, TransformerMixin
 from forecasting.utils import sin_cycle
 from forecasting.enums import Period
 
@@ -19,6 +20,23 @@ def make_features(df: pd.DataFrame):
     df['month'] = df['date_time'].dt.month
     df['day_of_week'] = (df['date_time'].dt.day_of_week+1)
     return df
+
+
+class HighFrequencySelector(BaseEstimator, TransformerMixin):
+    def __init__(self, min_frequency=0.05):
+        self.min_frequency = min_frequency
+        self.selected_columns_ = None
+
+    def fit(self, X, y=None):
+        frequencies = (X.sum() / len(X))
+        self.selected_columns_ = frequencies[frequencies >= self.min_frequency].index.tolist()
+        return self
+
+    def transform(self, X):
+        return X[self.selected_columns_]
+
+    def get_feature_names_out(self, input_features=None):
+        return self.selected_columns_
 
 
 def make_cyclical_feature_pipeline(period):
@@ -53,9 +71,18 @@ def make_numeric_pipeline():
     return numeric_features
 
 
-def make_col_transformer(categorical_features, numerical_features, cyclical):
+def make_dummies_pipeline():
+    dummies_features = Pipeline(
+        [
+            ('feature_selector', HighFrequencySelector(min_frequency=0.05))
+        ]
+    )
+    return dummies_features
+
+
+def make_col_transformer(categorical_features, numerical_features, dummies_features, cyclical_features):
     cyclical_transformers = []
-    for col in cyclical:
+    for col in cyclical_features:
         period = Period[col].value
         cyclical_transformers.append((col, make_cyclical_feature_pipeline(period), col))
 
@@ -63,6 +90,7 @@ def make_col_transformer(categorical_features, numerical_features, cyclical):
         [
             ('categorical', make_categorical_pipeline(), categorical_features),
             ('numeric', make_numeric_pipeline(), numerical_features),
+            ('dummies', make_dummies_pipeline(), dummies_features),
             *cyclical_transformers
         ]
     )
