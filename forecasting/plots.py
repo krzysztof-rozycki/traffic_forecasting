@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from numpy import arange
 
 
 def plot_boxplot(df: pd.DataFrame, column: str, top=None):
