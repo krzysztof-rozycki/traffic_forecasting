@@ -24,7 +24,10 @@ def make_features(df: pd.DataFrame):
 def make_cyclical_feature_pipeline(period):
     cyclical_feature = Pipeline(
         [
-            ('sin_transformation', FunctionTransformer(sin_cycle, kw_args={'period': period}))
+            (
+                'sin_transformation',
+                FunctionTransformer(sin_cycle, kw_args={'period': period}, feature_names_out='one-to-one')
+            )
         ]
     )
     return cyclical_feature
