@@ -1,0 +1,4 @@
+train_size: 0.8
+random_state: 42
+input_data_path: "data/raw/Metro_Interstate_Traffic_Volume.csv"
+model_path: "models/final_model.pkl"
