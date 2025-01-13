@@ -18,12 +18,12 @@ def adjust_path_to_project_root(config, project_root):
             for key, value in config.items()}
 
 
-features_config = load_yaml('../configs/features.yaml')
-models_config = load_yaml('../configs/models.yaml')
-random_search_config = load_yaml('../configs/random_search.yaml')
-
-train_config = load_yaml('../configs/train.yaml')
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+features_config = load_yaml(os.path.join(PROJECT_ROOT, 'configs/features.yaml'))
+models_config = load_yaml(os.path.join(PROJECT_ROOT, 'configs/models.yaml'))
+random_search_config = load_yaml(os.path.join(PROJECT_ROOT, 'configs/random_search.yaml'))
+
+train_config = load_yaml(os.path.join(PROJECT_ROOT, 'configs/train.yaml'))
 train_config = adjust_path_to_project_root(train_config, PROJECT_ROOT)
 
 
