@@ -22,7 +22,7 @@ def preprocess_data(df: pd.DataFrame):
 def split_into_x_y(df):
     target_name = features_config['target']
     X = df.drop(target_name, axis=1)
-    y = df[target_name]
+    y = df[target_name].values.ravel()  # ravel() is required to avoid warnings from the sklearn package
     return X, y
 
 
@@ -30,7 +30,6 @@ def make_train_test_split(X: pd.DataFrame, y: pd.Series):
     X_train, X_test, y_train, y_test = train_test_split(
         X, y,
         train_size=train_config['train_size'],
-        shuffle=False,
-        # random_state=train_config['random_state']
+        shuffle=False
     )
     return X_train, X_test, y_train, y_test
