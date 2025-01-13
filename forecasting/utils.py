@@ -27,7 +27,7 @@ train_config = load_yaml(os.path.join(PROJECT_ROOT, 'configs/train.yaml'))
 train_config = adjust_path_to_project_root(train_config, PROJECT_ROOT)
 
 
-def sin_cycle(x: np.ndarray, period: int):
+def cos_cycle(x: np.ndarray, period: int):
     if isinstance(x, pd.Series):
         x = x.values
     result = cos(2 * pi * x / period)
