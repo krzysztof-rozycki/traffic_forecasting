@@ -1,4 +1,5 @@
 n_iter: 15
 cv: 3
+cv_test_size_days: 365
 verbose: 1
 random_state: 42
