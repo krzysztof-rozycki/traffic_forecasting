@@ -1,4 +1,5 @@
 train_size: 0.8
+n_models_hyper_tuning: 2
 random_state: 42
 input_data_path: "data/raw/Metro_Interstate_Traffic_Volume.csv"
 model_path: "models/final_model.pkl"
