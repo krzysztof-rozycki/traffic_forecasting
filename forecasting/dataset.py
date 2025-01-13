@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from forecasting.utils import train_config
+from forecasting.utils import train_config, features_config
 
 
 def import_data(file_path: str):
@@ -17,6 +17,13 @@ def preprocess_data(df: pd.DataFrame):
     df_full = pd.concat([df_no_dummies, df_dummies], axis=1)
 
     return df_full
+
+
+def split_into_x_y(df):
+    target_name = features_config['target']
+    X = df.drop(target_name, axis=1)
+    y = df[target_name]
+    return X, y
 
 
 def make_train_test_split(X: pd.DataFrame, y: pd.Series):
