@@ -19,12 +19,14 @@ def baseline_models_estimation(X: pd.DataFrame, y: pd.Series, cv_splits=3, scori
     Returns:
         Dict: model_name: avg cv score, sorted by descending order.
     """
-    cv_strategy = KFold(n_splits=cv_splits, shuffle=True, random_state=42)
+    test_size = random_search_config['cv_test_size_days'] * 24
+    cv_strategy = TimeSeriesSplit(n_splits=cv_splits, test_size=test_size)
 
     results = {}
     for model_name in models_config:
         print(f"Running pipeline for {model_name}")
-        training_pipeline = make_training_pipeline(model_name)
+        model_kwargs = models_config[model_name]['default_params']
+        training_pipeline = make_training_pipeline(model_name, **model_kwargs)
         cv_score = cross_val_score(training_pipeline, X, y, cv=cv_strategy, scoring=scoring)
         results[model_name] = cv_score.mean()
 
@@ -49,7 +51,7 @@ def make_random_search(models: list, X: pd.DataFrame, y: pd.Series, scoring='neg
     for model_name in models:
         print(f"Running random search for {model_name}")
         training_pipeline = make_training_pipeline(model_name)
-        search_space = models_config.get(model_name)
+        search_space = models_config.get(model_name)['random_search']
         test_size = random_search_config['cv_test_size_days'] * 24  # hourly data require multiplication by 24 to get number of records
         cv_strategy = TimeSeriesSplit(n_splits=random_search_config['cv'], test_size=test_size)
 

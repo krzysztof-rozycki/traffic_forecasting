@@ -1,11 +1,26 @@
 LinearRegression:
-  fit_intercept: [True]
+  default_params:
+    fit_intercept: True
+  random_search:
+    fit_intercept: [True]
 Ridge:
-  alpha: [0.01, 0.1, 0.5, 0.9]
+  default_params:
+    alpha: 0.5
+  random_search:
+    alpha: [0.01, 0.1, 0.5, 0.9]
 ElasticNet:
-  alpha: [0.01, 0.1, 0.5, 0.9]
-  l1_ratio: [0.1, 0.5, 0.9]
+  default_params:
+    alpha: 0.5
+    l1_ratio: 1
+  random_search:
+    alpha: [0.01, 0.1, 0.5, 0.9]
+    l1_ratio: [0.1, 0.5, 0.8, 1]
 RandomForestRegressor:
-  n_estimators: [100, 200, 300]
-  max_depth: [5, 10, 15, 20]
-  min_samples_split: [2, 7, 10, 15]
+  default_params:
+    n_estimators: 100
+    max_depth: 5
+    min_samples_split: 5
+  random_search:
+    n_estimators: [100, 200, 300]
+    max_depth: [5, 10, 15, 20]
+    min_samples_split: [2, 7, 10, 15]
