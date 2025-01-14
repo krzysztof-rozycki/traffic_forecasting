@@ -29,15 +29,13 @@ install dependencies using ```pip install -r requirements.txt```. Then install t
 Project Structure
 ------------
     ├── configs
-    │   └── feature_params    <- Configs for features
-    │   └── path_config          <- Configs for all needed paths
-    │   └── splitting_params     <- Configs for splitting params
-    │   └── train_params         <- Configs for logreg and randomforest models parametres
-    │   └── predict_config.yaml  <- Config for prediction pipline
-    │   └── train_config.yaml    <- Config for train pipline
+    │   └── features          <- all features and their types
+    │   └── models            <- lists model types and their default parameters and search space for tuning
+    │   └── random_search     <- config for random search pamars
+    │   └── train             <- Config for training the model and paths for input and output
     │ 
     ├── data
-    │   └── raw            <- The original data dump.
+    │ └── raw            <- The original data dump.
     │
     ├── models             <- Trained models
     │
