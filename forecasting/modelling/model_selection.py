@@ -55,9 +55,9 @@ def make_random_search(models: list, X: pd.DataFrame, y: pd.Series, scoring='neg
         test_size = random_search_config['cv_test_size_days'] * 24  # hourly data require multiplication by 24 to get number of records
         cv_strategy = TimeSeriesSplit(n_splits=random_search_config['cv'], test_size=test_size)
 
-        # adjusting search space keys to reflect the structure of the training pipeline
-        name_of_model_step = training_pipeline.steps[-1][0]
-        if search_space:
+        if search_space:  # doesn't run the random search if search space is not provided (for example in case of LinReg)
+            # adjusting search space keys to reflect the structure of the training pipeline
+            name_of_model_step = training_pipeline.steps[-1][0]
             search_space_adjusted = {name_of_model_step + "__" + key: value for key, value in search_space.items()}
 
             # define Random Search
