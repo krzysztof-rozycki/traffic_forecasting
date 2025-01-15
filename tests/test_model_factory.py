@@ -15,6 +15,7 @@ class TestModelFactory(TestCase):
         for model_name in list_of_available_models:
             model = get_model(model_name)
             self.assertIsInstance(model, BaseEstimator)
+            self.assertNotIsInstance(model, type, msg="Model factory returned a class not an instance")
 
     def test_value_error(self):
         model_name = 'not_existing_model'
