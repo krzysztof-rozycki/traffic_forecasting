@@ -18,7 +18,14 @@ def adjust_path_to_project_root(config, project_root):
             for key, value in config.items()}
 
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+def get_current_file_directory():
+    current_file_path = os.path.abspath(__file__)
+    # Get the directory in which the current file is located
+    module_directory = os.path.dirname(current_file_path)
+    return module_directory
+
+PROJECT_ROOT = get_current_file_directory()
+print(f"PROJECT_ROOT: {PROJECT_ROOT}")
 features_config = load_yaml(os.path.join(PROJECT_ROOT, 'configs/features.yaml'))
 models_config = load_yaml(os.path.join(PROJECT_ROOT, 'configs/models.yaml'))
 random_search_config = load_yaml(os.path.join(PROJECT_ROOT, 'configs/random_search.yaml'))
