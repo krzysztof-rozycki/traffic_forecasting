@@ -22,7 +22,9 @@ def get_current_file_directory():
     current_file_path = os.path.abspath(__file__)
     # Get the directory in which the current file is located
     module_directory = os.path.dirname(current_file_path)
-    return module_directory
+    # Get the parent directory of module_directory
+    parent_directory = os.path.dirname(module_directory)
+    return parent_directory
 
 PROJECT_ROOT = get_current_file_directory()
 print(f"PROJECT_ROOT: {PROJECT_ROOT}")
