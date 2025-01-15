@@ -26,6 +26,11 @@ Installation
 It is recommended to install the package in virtual environment. First create the environment using venv or conda and
 install dependencies using ```pip install -r requirements.txt```. Then install the forecasting package by running ```pip install .```
 
+Set up the env variable path to the main project location in order to allow the script to locate the config folder.
+If you use default folder name from the repo it should end at traffic_forecasting, for example "C:\projects\traffic_forecasting".
+You can run the following command in PowerShell:
+```$env:FORECASTING_CONFIG_PATH = "absolutepath\to_projectlocation"```
+
 Project Structure
 ------------
     ├── configs
