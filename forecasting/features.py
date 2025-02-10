@@ -1,10 +1,10 @@
 import pandas as pd
 from sklearn.impute import SimpleImputer
-from sklearn.pipeline import Pipeline
+from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, FunctionTransformer
 from sklearn.compose import ColumnTransformer
 from sklearn.base import BaseEstimator, TransformerMixin
-from forecasting.utils import cos_cycle, train_config
+from forecasting.utils import cos_cycle, sin_cycle, train_config
 from forecasting.enums import Period
 
 
@@ -61,12 +61,19 @@ def make_cyclical_feature_pipeline(period):
     Returns:
         Pipeline: sklearn Pipeline with FunctionTransformer.
     """
+    transformations = [
+        (
+            'sin_transformation',
+            FunctionTransformer(sin_cycle, kw_args={'period': period}, feature_names_out='one-to-one')
+        ),
+        (
+            'cos_transformation',
+            FunctionTransformer(cos_cycle, kw_args={'period': period}, feature_names_out='one-to-one')
+        )
+    ]
     cyclical_feature = Pipeline(
         [
-            (
-                'sin_transformation',
-                FunctionTransformer(cos_cycle, kw_args={'period': period}, feature_names_out='one-to-one')
-            )
+            ('cyclical_transformation', FeatureUnion(transformations))
         ]
     )
     return cyclical_feature
@@ -120,6 +127,7 @@ def make_dummies_pipeline():
 
 
 def make_col_transformer(categorical_features, numerical_features, dummies_features, cyclical_features):
+    # for cyclical features create pipeline with sin and cos cycle transformation
     cyclical_transformers = []
     for col in cyclical_features:
         period = Period[col].value
