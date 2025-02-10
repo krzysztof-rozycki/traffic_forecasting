@@ -30,11 +30,25 @@ train_config = load_yaml(os.path.join(config_path, 'configs/train.yaml'))
 train_config = adjust_path_to_project_root(train_config, config_path)
 
 
-def cos_cycle(x: np.ndarray, period: int):
+def calc_cycle(x: np.ndarray, period: int, type_: str):
+    if type_=="sin":
+        transform_func = sin
+    elif type_=="cos":
+        transform_func = cos
+    else:
+        raise Exception(f"Type {type_} not implemented")
+
     if isinstance(x, pd.Series):
         x = x.values
-    result = cos(2 * pi * x / period)
+    result = transform_func(2 * pi * x / period)
     return result.reshape(-1, 1)
+
+def cos_cycle(x: np.ndarray, period: int):
+    return calc_cycle(x, period, type_="cos")
+
+
+def sin_cycle(x: np.ndarray, period: int):
+    return calc_cycle(x, period, type_="sin")
 
 
 def save_model(model, output_name: str):
