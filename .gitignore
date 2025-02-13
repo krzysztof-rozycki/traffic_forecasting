@@ -1,3 +1,8 @@
+# don't track notebooks
+notebooks/*
+# Except for the Final.ipynb
+!notebooks/Final.ipynb
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
