@@ -4,6 +4,25 @@ from forecasting.modelling.train import make_training_pipeline
 from forecasting.utils import models_config, random_search_config
 
 
+def get_cv_strategy(test_size_days: int, cv_splits: int):
+    """
+    Defines cross-validation strategy for time series data according to number of splits and test size parameters.
+
+    Parameters:
+        test_size_days (int): number of days to be included in test fold
+        cv_splits (int): number of folds used in cross-validation
+
+    Returns:
+        TimeSeriesSplit: Time-series cross-validator object
+    """
+
+    # multiply test_size_days by 24 hours to get the number of rows that will need to be placed in the test sample
+    test_size = test_size_days * 24
+
+    # return TimeSeriesSplit class that can be used as input to cross validation
+    return TimeSeriesSplit(n_splits=cv_splits, test_size=test_size)
+
+
 def baseline_models_estimation(X: pd.DataFrame, y: pd.Series, cv_splits=3, scoring='neg_mean_squared_error'):
     """
     Estimates baseline models (based on models.yaml config) with default parameters. This is done to get a rough idea
@@ -19,8 +38,7 @@ def baseline_models_estimation(X: pd.DataFrame, y: pd.Series, cv_splits=3, scori
     Returns:
         Dict: model_name: avg cv score, sorted by descending order.
     """
-    test_size = random_search_config['cv_test_size_days'] * 24
-    cv_strategy = TimeSeriesSplit(n_splits=cv_splits, test_size=test_size)
+    cv_strategy = get_cv_strategy(random_search_config['cv_test_size_days'], cv_splits)
 
     results = {}
     for model_name in models_config:
@@ -52,8 +70,7 @@ def make_random_search(models: list, X: pd.DataFrame, y: pd.Series, scoring='neg
         print(f"Running random search for {model_name}")
         training_pipeline = make_training_pipeline(model_name)
         search_space = models_config.get(model_name)['random_search']
-        test_size = random_search_config['cv_test_size_days'] * 24  # hourly data require multiplication by 24 to get number of records
-        cv_strategy = TimeSeriesSplit(n_splits=random_search_config['cv'], test_size=test_size)
+        cv_strategy = get_cv_strategy(random_search_config['cv_test_size_days'], cv_splits=random_search_config['cv'])
 
         if search_space:  # doesn't run the random search if search space is not provided (for example in case of LinReg)
             # adjusting search space keys to reflect the structure of the training pipeline
