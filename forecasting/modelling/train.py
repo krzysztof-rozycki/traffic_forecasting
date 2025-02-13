@@ -4,7 +4,18 @@ from forecasting.modelling.model_factory import get_model
 from forecasting.utils import features_config
 
 
-def make_training_pipeline(model_name, **kwargs):
+def make_training_pipeline(model_name: str, **kwargs):
+    """
+    Constructs a training pipeline by initializing a column transformer and a model selected by its name.
+
+    Parameters:
+        model_name (str): Name of the model. Must be one of names implemented in model_factory
+        **kwargs: Additional keyword arguments specific to the model
+
+    Returns:
+        Pipeline: A scikit-learn pipeline object which includes both a column transformer and the specified model.
+        This pipeline can be used for fitting and transforming data.
+    """
     transformer = make_col_transformer(
         categorical_features=features_config['categorical_features'],
         numerical_features=features_config['numerical_features'],

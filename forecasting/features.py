@@ -51,8 +51,8 @@ def make_cyclical_feature_pipeline(period):
     """
     Builds pipeline for cyclical features. Cyclical features are hour, month and day_of_week. They shouldn't be used
     directly with the model as, for example, in case of "hour" the values 23 and 0 are far apart from each other, while
-    in fact they are next to each other in a day cycle. Therefore, these features are processed wuth the coc_cycle
-    function which ensures that the values 23 and 0 are close to each other.
+    in fact they are next to each other in a day cycle. Therefore, these features are processed with the cos_cycle or
+    sin_cycle function which ensures that the values 23 and 0 are close to each other.
 
     Parameters:
         period (int): A value indicating what is the length of a full cycle, for example 24 in case of the hour or
@@ -71,6 +71,7 @@ def make_cyclical_feature_pipeline(period):
             FunctionTransformer(cos_cycle, kw_args={'period': period}, feature_names_out='one-to-one')
         )
     ]
+
     cyclical_feature = Pipeline(
         [
             ('cyclical_transformation', FeatureUnion(transformations))

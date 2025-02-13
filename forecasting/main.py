@@ -6,6 +6,17 @@ from forecasting.utils import save_model, train_config, features_config
 
 
 def run():
+    """
+    Executes the entire processing pipeline.
+    This function serves as the main entry point for running the end-to-end process. It handles data loading,
+    preprocessing, model training, and evaluation workflows. It is primarily designed to be invoked from the CLI.
+
+    Parameters:
+        None
+
+    Returns:
+        None: This function does not return any value, but it saves the final model it the predefined directory.
+    """
     # import and make initial preprocessing of the data
     print("**Processing data**\n")
     file_path = train_config['input_data_path']
