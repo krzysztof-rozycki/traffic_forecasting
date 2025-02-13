@@ -17,11 +17,12 @@ def adjust_path_to_project_root(config, project_root):
             for key, value in config.items()}
 
 
-def get_current_file_directory():
+def get_project_root_directory():
     config_path = os.getenv('FORECASTING_CONFIG_PATH')
     return config_path
 
-config_path = get_current_file_directory()
+
+config_path = get_project_root_directory()
 features_config = load_yaml(os.path.join(config_path, 'configs/features.yaml'))
 models_config = load_yaml(os.path.join(config_path, 'configs/models.yaml'))
 random_search_config = load_yaml(os.path.join(config_path, 'configs/random_search.yaml'))
